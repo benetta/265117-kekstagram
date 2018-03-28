@@ -1,7 +1,7 @@
 # Личный проект «Кекстаграм» [![Build status][travis-image]][travis-url]
 
 * Студент: [Ксения Токарева](https://up.htmlacademy.ru/javascript/13/user/265117).
-* Наставник: `Неизвестно`.
+* Наставник: [Владислав Балабанович](https://htmlacademy.ru/profile/balabanovich).
 
 ---
 
