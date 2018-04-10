@@ -97,19 +97,52 @@ bigPicture.querySelector('.comments-count').textContent = photos[0].comments.len
 
 
 // комментарии
-var commentsContainer = document.querySelector('.social__comments');
+// if (!photos[0].comments[1]) {
+//   commentsContainer.removeChild(commentsContainer.lastElementChild);
+// }
 
-if (!photos[0].comments[1]) {
-  commentsContainer.removeChild(commentsContainer.lastElementChild);
-}
+// var userComments = commentsContainer.children;
 
-var userComments = commentsContainer.children;
-
-for (var j = 0; j < userComments.length; j++) {
-  userComments[j].src = 'img/avatar-' + getRandomNum(1, (AVATARS_MAX + 1)) + '.svg';
-  userComments[j].childNodes[2].data = photos[0].comments[j];
-}
+// for (var j = 0; j < userComments.length; j++) {
+//   userComments[j].src = 'img/avatar-' + getRandomNum(1, (AVATARS_MAX + 1)) + '.svg';
+//   userComments[j].childNodes[2].data = photos[0].comments[j];
+// }
 
 // прячем блоки
 document.querySelector('.social__comment-count').classList.add('visually-hidden');
 document.querySelector('.social__comment-loadmore').classList.add('visually-hidden');
+
+// генерируем комментарий
+var commentsContainer = document.querySelector('.social__comments');
+
+for (var j = commentsContainer.children.length; j > 0; j--) {
+  commentsContainer.removeChild(commentsContainer.lastElementChild);
+}
+
+/**
+ * генерируем комментарий к большому фото
+ * @param  {num} l номер комментария
+ * @return {element}   элемент разметки с комментарием
+ */
+var renderComment = function (l) {
+  var commentElement = document.createElement('li');
+  commentElement.classList.add('social__comment', 'social__comment--text');
+
+  var imgElement = document.createElement('img');
+  imgElement.classList.add('social__picture');
+  imgElement.src = 'img/avatar-' + getRandomNum(1, (AVATARS_MAX + 1)) + '.svg';
+  imgElement.alt = 'Аватар комментатора фотографии';
+  imgElement.width = '35';
+  imgElement.height = '35';
+  commentElement.appendChild(imgElement);
+
+  var textElement = document.createElement('span');
+  textElement.textContent = photos[0].comments[l];
+  commentElement.appendChild(textElement);
+
+  return commentElement;
+};
+
+for (var k = 0; (k < photos[0].comments.length) && (k < 2); k++) {
+  commentsContainer.appendChild(renderComment(k));
+}
