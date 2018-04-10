@@ -51,7 +51,7 @@ var getRandomNum = function (min, max) {
  */
 var generateComment = function (n) {
   var comments = [];
-  var commentsCopy = COMMENTS;
+  var commentsCopy = COMMENTS.slice();
 
   for (var i = 0; i < n; i++) {
     var a = getRandomNum(0, commentsCopy.length);
@@ -94,19 +94,6 @@ bigPicture.classList.remove('hidden');
 bigPicture.querySelector('.big-picture__img img').src = photos[0].url;
 bigPicture.querySelector('.likes-count').textContent = photos[0].likes;
 bigPicture.querySelector('.comments-count').textContent = photos[0].comments.length;
-
-
-// комментарии
-// if (!photos[0].comments[1]) {
-//   commentsContainer.removeChild(commentsContainer.lastElementChild);
-// }
-
-// var userComments = commentsContainer.children;
-
-// for (var j = 0; j < userComments.length; j++) {
-//   userComments[j].src = 'img/avatar-' + getRandomNum(1, (AVATARS_MAX + 1)) + '.svg';
-//   userComments[j].childNodes[2].data = photos[0].comments[j];
-// }
 
 // прячем блоки
 document.querySelector('.social__comment-count').classList.add('visually-hidden');
