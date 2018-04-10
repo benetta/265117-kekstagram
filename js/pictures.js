@@ -51,9 +51,12 @@ var getRandomNum = function (min, max) {
  */
 var generateComment = function (n) {
   var comments = [];
+  var commentsCopy = COMMENTS;
 
   for (var i = 0; i < n; i++) {
-    comments.push(COMMENTS[getRandomNum(0, COMMENTS.length)]);
+    var a = getRandomNum(0, commentsCopy.length);
+    comments.push(commentsCopy[a]);
+    commentsCopy.splice(a, 1);
   }
 
   return comments;
