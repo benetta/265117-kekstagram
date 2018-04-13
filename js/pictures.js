@@ -96,7 +96,7 @@ var bigPictureClose = bigPicture.querySelector('#picture-cancel');
 document.querySelector('.social__comment-count').classList.add('visually-hidden');
 document.querySelector('.social__comment-loadmore').classList.add('visually-hidden');
 
-// генерируем комментарий
+// комментарий
 var commentsContainer = document.querySelector('.social__comments');
 
 /**
@@ -117,8 +117,7 @@ var renderComment = function (l, m) {
   imgElement.height = '35';
   commentElement.appendChild(imgElement);
 
-  var textElement = document.createElement('span');
-  textElement.textContent = photos[m].comments[l];
+  var textElement = document.createTextNode(photos[m].comments[l]);
   commentElement.appendChild(textElement);
 
   return commentElement;
@@ -126,10 +125,11 @@ var renderComment = function (l, m) {
 
 // обработчики для фото
 pictureLinks.forEach( function(picture, num) {
-  picture.addEventListener('click', function(evt) {
+  picture.addEventListener('click', function() {
     bigPicture.classList.remove('hidden');
 
     bigPicture.querySelector('.big-picture__img img').src = photos[num].url;
+    bigPicture.querySelector('.social__caption').textContent = photos[num].description;
     bigPicture.querySelector('.likes-count').textContent = photos[num].likes;
     bigPicture.querySelector('.comments-count').textContent = photos[num].comments.length;
 
@@ -156,6 +156,11 @@ var imageUploadElement = document.querySelector('.img-upload__overlay');
 
 var onUploadFileClick = function() {
   imageUploadElement.classList.remove('hidden');
+  resizeControlValue.value = '100%';
+  imageSlider.classList.add('hidden');
+  scalePin.style.left = '100%';
+  scaleLevel.style.width = '100%';
+
 };
 
 var onUploadCancelClick = function() {
@@ -181,15 +186,17 @@ var onEffectsRadioClick = function(evt) {
   var heat = imageUploadEffects.querySelector('#effect-heat');
 
   var setEffect = function (eff) {
-  imageUploadImg.className = '';
-  var effect = 'effects__preview--' + eff;
-  imageUploadImg.classList.add(effect);
-
+    imageUploadImg.className = '';
+    var effect = 'effects__preview--' + eff;
+    imageUploadImg.classList.add(effect);
+    imageSlider.classList.remove('hidden');
+    resizeControl.style.zIndex = 1;
   }
 
   switch(evt.target) {
     case none:
       imageUploadImg.removeAttribute('class');
+      imageSlider.classList.add('hidden');
       break;
     case chrome:
       setEffect('chrome');
@@ -214,11 +221,10 @@ imageUploadEffects.addEventListener('click', onEffectsRadioClick);
 
 ///////////////////////////////////////////////////////////
 
+var resizeControl = imageUploadElement.querySelector('.resize');
 var resizeControlMinus = imageUploadElement.querySelector('.resize__control--minus');
 var resizeControlValue = imageUploadElement.querySelector('.resize__control--value');
 var resizeControlPlus = imageUploadElement.querySelector('.resize__control--plus');
-
-resizeControlValue.value = '100%';
 
 var resizeImg = function(evt) {
   var scale;
@@ -246,3 +252,8 @@ var resizeImg = function(evt) {
 
 resizeControlMinus.addEventListener('click', resizeImg);
 resizeControlPlus.addEventListener('click', resizeImg);
+
+///////////////////////////////////////////////////////////
+
+var scalePin = imageUploadElement.querySelector('.scale__pin');
+var scaleLevel = imageUploadElement.querySelector('.scale__level');
