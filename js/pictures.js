@@ -246,7 +246,7 @@ var resizeImg = function (evt) {
   imageUploadImg.style.transform = scale;
 
   if (currentValue === 100) {
-    imageUploadImg.style.transform = 1;
+    imageUploadImg.style.transform = 'scale(1)';
   }
 };
 
