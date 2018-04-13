@@ -257,3 +257,40 @@ resizeControlPlus.addEventListener('click', resizeImg);
 
 var scalePin = imageUploadElement.querySelector('.scale__pin');
 var scaleLevel = imageUploadElement.querySelector('.scale__level');
+var scaleValue = imageUploadElement.querySelector('.scale__value');
+
+// получаем положение пина (scalePin.style.left)
+
+var setSaturation = function () {
+  var pinPosition = Number.parseInt(scalePin.style.left, 10);
+  scaleValue.value = pinPosition;
+
+  var filterName = imageUploadImg.classList.value;
+  filterName = filterName.split('--');
+  filterName = filterName[1];
+
+  var result;
+
+  switch(filterName) {
+    case 'chrome':
+      result = 'grayscale(' + (pinPosition / 100) + ');';
+      break;
+    case 'sepia':
+      result = 'sepia(' + (pinPosition / 100) + ');';
+      break;
+    case 'marvin':
+      result = 'invert(' + pinPosition + '%);';
+      break;
+    case 'phobos':
+      result = 'blur(' + (pinPosition * 3 / 100) + 'px);';
+      break;
+    case 'heat':
+      result = 'brightness(' + ((pinPosition * 2 / 100) + 1 ) + ');';
+      break;
+  }
+
+  console.log(result);
+  imageUploadImg.style.filter = result;
+};
+
+scalePin.addEventListener('mouseup', setSaturation);
