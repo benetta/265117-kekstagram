@@ -271,7 +271,7 @@ var setSaturation = function () {
 
   var result;
 
-  switch(filterName) {
+  switch (filterName) {
     case 'chrome':
       result = 'grayscale(' + (pinPosition / 100) + ');';
       break;
@@ -285,11 +285,11 @@ var setSaturation = function () {
       result = 'blur(' + (pinPosition * 3 / 100) + 'px);';
       break;
     case 'heat':
-      result = 'brightness(' + ((pinPosition * 2 / 100) + 1 ) + ');';
+      result = 'brightness(' + ((pinPosition * 2 / 100) + 1) + ');';
       break;
   }
 
-  console.log(result);
+  // console.log(result);
   imageUploadImg.style.filter = result;
 };
 
