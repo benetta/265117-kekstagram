@@ -124,8 +124,8 @@ var renderComment = function (l, m) {
 };
 
 // обработчики для фото
-pictureLinks.forEach( function(picture, num) {
-  picture.addEventListener('click', function() {
+pictureLinks.forEach(function (picture, num) {
+  picture.addEventListener('click', function () {
     bigPicture.classList.remove('hidden');
 
     bigPicture.querySelector('.big-picture__img img').src = photos[num].url;
@@ -143,18 +143,18 @@ pictureLinks.forEach( function(picture, num) {
   });
 });
 
-bigPictureClose.addEventListener('click', function() {
+bigPictureClose.addEventListener('click', function () {
   bigPicture.classList.add('hidden');
 });
 
-///////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////
+// /////////////////////////////////////////////////////////
+// /////////////////////////////////////////////////////////
 
 var uploadFile = document.querySelector('#upload-file');
 var uploadCancel = document.querySelector('#upload-cancel');
 var imageUploadElement = document.querySelector('.img-upload__overlay');
 
-var onUploadFileClick = function() {
+var onUploadFileClick = function () {
   imageUploadElement.classList.remove('hidden');
   resizeControlValue.value = '100%';
   imageSlider.classList.add('hidden');
@@ -163,7 +163,7 @@ var onUploadFileClick = function() {
 
 };
 
-var onUploadCancelClick = function() {
+var onUploadCancelClick = function () {
   imageUploadElement.classList.add('hidden');
   uploadFile.value = '';
 };
@@ -171,13 +171,13 @@ var onUploadCancelClick = function() {
 uploadFile.addEventListener('change', onUploadFileClick);
 uploadCancel.addEventListener('click', onUploadCancelClick);
 
-///////////////////////////////////////////////////////////
+// /////////////////////////////////////////////////////////
 
 var imageUploadEffects = imageUploadElement.querySelector('.effects__list');
 var imageUploadImg = imageUploadElement.querySelector('.img-upload__preview img');
 var imageSlider = imageUploadElement.querySelector('.img-upload__scale');
 
-var onEffectsRadioClick = function(evt) {
+var onEffectsRadioClick = function (evt) {
   var none = imageUploadEffects.querySelector('#effect-none');
   var chrome = imageUploadEffects.querySelector('#effect-chrome');
   var sepia = imageUploadEffects.querySelector('#effect-sepia');
@@ -191,9 +191,9 @@ var onEffectsRadioClick = function(evt) {
     imageUploadImg.classList.add(effect);
     imageSlider.classList.remove('hidden');
     resizeControl.style.zIndex = 1;
-  }
+  };
 
-  switch(evt.target) {
+  switch (evt.target) {
     case none:
       imageUploadImg.removeAttribute('class');
       imageSlider.classList.add('hidden');
@@ -219,19 +219,19 @@ var onEffectsRadioClick = function(evt) {
 
 imageUploadEffects.addEventListener('click', onEffectsRadioClick);
 
-///////////////////////////////////////////////////////////
+// /////////////////////////////////////////////////////////
 
 var resizeControl = imageUploadElement.querySelector('.resize');
 var resizeControlMinus = imageUploadElement.querySelector('.resize__control--minus');
 var resizeControlValue = imageUploadElement.querySelector('.resize__control--value');
 var resizeControlPlus = imageUploadElement.querySelector('.resize__control--plus');
 
-var resizeImg = function(evt) {
+var resizeImg = function (evt) {
   var scale;
   var currentValue = Number.parseInt(resizeControlValue.value, 10);
 
-  if(evt.target === resizeControlMinus) {
-    if(currentValue > 25) {
+  if (evt.target === resizeControlMinus) {
+    if (currentValue > 25) {
       currentValue -= 25;
     }
   } else if (evt.target === resizeControlPlus) {
@@ -245,15 +245,15 @@ var resizeImg = function(evt) {
   resizeControlValue.value = (currentValue + '%');
   imageUploadImg.style.transform = scale;
 
-  if(currentValue === 100) {
-    imageUploadImg.removeAttribute('style');;
+  if (currentValue === 100) {
+    imageUploadImg.removeAttribute('style');
   }
 };
 
 resizeControlMinus.addEventListener('click', resizeImg);
 resizeControlPlus.addEventListener('click', resizeImg);
 
-///////////////////////////////////////////////////////////
+// /////////////////////////////////////////////////////////
 
 var scalePin = imageUploadElement.querySelector('.scale__pin');
 var scaleLevel = imageUploadElement.querySelector('.scale__level');
