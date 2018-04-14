@@ -6,6 +6,10 @@ var PHOTOS_MAX = 25;
 
 var AVATARS_MAX = 6;
 
+var RESIZE_STEP = 25;
+var RESIZE_MIN = 25;
+var RESIZE_MAX = 100;
+
 var photos = [];
 
 var COMMENTS = ['Всё отлично!',
@@ -69,12 +73,13 @@ for (var i = 0; i < PHOTOS_MAX; i++) {
 var pictureList = document.querySelector('.pictures');
 var picturesTemplate = document.querySelector('#picture').content.querySelector('.picture__link');
 
-var renderPhoto = function (photo) {
+var renderPhoto = function (num) {
   var photoElement = picturesTemplate.cloneNode(true);
 
-  photoElement.querySelector('.picture__img').src = photo.url;
-  photoElement.querySelector('.picture__stat--likes').textContent = photo.likes;
-  photoElement.querySelector('.picture__stat--comments').textContent = photo.comments.length;
+  photoElement.querySelector('.picture__img').src = photos[num].url;
+  photoElement.querySelector('.picture__stat--likes').textContent = photos[num].likes;
+  photoElement.querySelector('.picture__stat--comments').textContent = photos[num].comments.length;
+  photoElement.querySelector('.picture__img').dataset.id = num;
 
   return photoElement;
 };
@@ -82,7 +87,7 @@ var renderPhoto = function (photo) {
 var fragment = document.createDocumentFragment();
 
 for (var n = 0; n < PHOTOS_MAX; n++) {
-  fragment.appendChild(renderPhoto(photos[n]));
+  fragment.appendChild(renderPhoto(n));
 }
 
 pictureList.appendChild(fragment);
@@ -123,24 +128,28 @@ var renderComment = function (l, m) {
   return commentElement;
 };
 
+var onPhotoClick = function (evt) {
+  var photoId = evt.target.dataset.id;
+
+  bigPicture.classList.remove('hidden');
+
+  bigPicture.querySelector('.big-picture__img img').src = photos[photoId].url;
+  bigPicture.querySelector('.social__caption').textContent = photos[photoId].description;
+  bigPicture.querySelector('.likes-count').textContent = photos[photoId].likes;
+  bigPicture.querySelector('.comments-count').textContent = photos[photoId].comments.length;
+
+  for (var j = commentsContainer.children.length; j > 0; j--) {
+    commentsContainer.removeChild(commentsContainer.lastElementChild);
+  }
+
+  for (var k = 0; (k < photos[photoId].comments.length) && (k < 2); k++) {
+    commentsContainer.appendChild(renderComment(k, photoId));
+  }
+};
+
 // обработчики для фото
-pictureLinks.forEach(function (picture, num) {
-  picture.addEventListener('click', function () {
-    bigPicture.classList.remove('hidden');
-
-    bigPicture.querySelector('.big-picture__img img').src = photos[num].url;
-    bigPicture.querySelector('.social__caption').textContent = photos[num].description;
-    bigPicture.querySelector('.likes-count').textContent = photos[num].likes;
-    bigPicture.querySelector('.comments-count').textContent = photos[num].comments.length;
-
-    for (var j = commentsContainer.children.length; j > 0; j--) {
-      commentsContainer.removeChild(commentsContainer.lastElementChild);
-    }
-
-    for (var k = 0; (k < photos[num].comments.length) && (k < 2); k++) {
-      commentsContainer.appendChild(renderComment(k, num));
-    }
-  });
+pictureLinks.forEach(function (picture) {
+  picture.addEventListener('click', onPhotoClick);
 });
 
 bigPictureClose.addEventListener('click', function () {
@@ -160,7 +169,6 @@ var onUploadFileClick = function () {
   imageSlider.classList.add('hidden');
   scalePin.style.left = '100%';
   scaleLevel.style.width = '100%';
-
 };
 
 var onUploadCancelClick = function () {
@@ -222,44 +230,38 @@ imageUploadEffects.addEventListener('click', onEffectsRadioClick);
 // /////////////////////////////////////////////////////////
 
 var resizeControl = imageUploadElement.querySelector('.resize');
-var resizeControlMinus = imageUploadElement.querySelector('.resize__control--minus');
 var resizeControlValue = imageUploadElement.querySelector('.resize__control--value');
+var resizeControlMinus = imageUploadElement.querySelector('.resize__control--minus');
 var resizeControlPlus = imageUploadElement.querySelector('.resize__control--plus');
 
-var resizeImg = function (evt) {
+var onResizeControlClick = function (evt) {
   var scale;
   var currentValue = Number.parseInt(resizeControlValue.value, 10);
 
   if (evt.target === resizeControlMinus) {
-    if (currentValue > 25) {
-      currentValue -= 25;
+    if (currentValue > RESIZE_MIN) {
+      currentValue -= RESIZE_STEP;
     }
   } else if (evt.target === resizeControlPlus) {
-    if (currentValue < 100) {
-      currentValue += 25;
+    if (currentValue < RESIZE_MAX) {
+      currentValue += RESIZE_STEP;
     }
   }
 
-  scale = 'scale(0.' + currentValue + ')';
-
-  resizeControlValue.value = (currentValue + '%');
+  scale = 'scale(' + (currentValue / 100) + ')';
   imageUploadImg.style.transform = scale;
 
-  if (currentValue === 100) {
-    imageUploadImg.style.transform = 'scale(1)';
-  }
+  resizeControlValue.value = (currentValue + '%');
 };
 
-resizeControlMinus.addEventListener('click', resizeImg);
-resizeControlPlus.addEventListener('click', resizeImg);
+resizeControlMinus.addEventListener('click', onResizeControlClick);
+resizeControlPlus.addEventListener('click', onResizeControlClick);
 
 // /////////////////////////////////////////////////////////
 
 var scalePin = imageUploadElement.querySelector('.scale__pin');
 var scaleLevel = imageUploadElement.querySelector('.scale__level');
 var scaleValue = imageUploadElement.querySelector('.scale__value');
-
-// получаем положение пина (scalePin.style.left)
 
 var setSaturation = function () {
   var pinPosition = Number.parseInt(scalePin.style.left, 10);
@@ -294,3 +296,7 @@ var setSaturation = function () {
 };
 
 scalePin.addEventListener('mouseup', setSaturation);
+
+
+// записать нач.расстояние и конеч.состояние, и высчитать между ними разницу по x/y
+// к текущему положению блока добавить расстояние, на кот.переместился курсор мыши
