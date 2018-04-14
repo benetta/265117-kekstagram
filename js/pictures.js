@@ -10,6 +10,9 @@ var RESIZE_STEP = 25;
 var RESIZE_MIN = 25;
 var RESIZE_MAX = 100;
 
+var SLIDER_WIDTH = 495;
+var SCALE_MAX = 100;
+
 var photos = [];
 
 var COMMENTS = ['Всё отлично!',
@@ -169,10 +172,14 @@ var onUploadFileClick = function () {
   imageSlider.classList.add('hidden');
   scalePin.style.left = '100%';
   scaleLevel.style.width = '100%';
+  scaleValue.value = '100';
+  resizeControl.style.zIndex = 1;
 };
 
 var onUploadCancelClick = function () {
   imageUploadElement.classList.add('hidden');
+  imageUploadImg.removeAttribute('style');
+  imageUploadImg.removeAttribute('class');
   uploadFile.value = '';
 };
 
@@ -194,16 +201,30 @@ var onEffectsRadioClick = function (evt) {
   var heat = imageUploadEffects.querySelector('#effect-heat');
 
   var setEffect = function (eff) {
+    // сбрасываю класс и стиль
     imageUploadImg.className = '';
+    imageUploadImg.style = 'null';
+
+    // возвращаю на место ресайз
+    var resize = Number.parseInt(resizeControlValue.value, 10);
+    imageUploadImg.style.transform = 'scale(' + (resize / 100) + ')';
+
+    // задаю новый класс
     var effect = 'effects__preview--' + eff;
     imageUploadImg.classList.add(effect);
+
+    // показываю слайдер
     imageSlider.classList.remove('hidden');
-    resizeControl.style.zIndex = 1;
+
+    // сбрасываю значения слайдера
+    scalePin.style.left = '100%';
+    scaleLevel.style.width = '100%';
   };
 
   switch (evt.target) {
     case none:
       imageUploadImg.removeAttribute('class');
+      imageUploadImg.style = 'null';
       imageSlider.classList.add('hidden');
       break;
     case chrome:
@@ -263,10 +284,7 @@ var scalePin = imageUploadElement.querySelector('.scale__pin');
 var scaleLevel = imageUploadElement.querySelector('.scale__level');
 var scaleValue = imageUploadElement.querySelector('.scale__value');
 
-var setSaturation = function () {
-  var pinPosition = Number.parseInt(scalePin.style.left, 10);
-  scaleValue.value = pinPosition;
-
+var setSaturation = function (position) {
   var filterName = imageUploadImg.classList.value;
   filterName = filterName.split('--');
   filterName = filterName[1];
@@ -275,28 +293,69 @@ var setSaturation = function () {
 
   switch (filterName) {
     case 'chrome':
-      result = 'grayscale(' + (pinPosition / 100) + ');';
+      result = 'grayscale(' + (position / 100) + ')';
       break;
     case 'sepia':
-      result = 'sepia(' + (pinPosition / 100) + ');';
+      result = 'sepia(' + (position / 100) + ')';
       break;
     case 'marvin':
-      result = 'invert(' + pinPosition + '%);';
+      result = 'invert(' + position + '%)';
       break;
     case 'phobos':
-      result = 'blur(' + (pinPosition * 3 / 100) + 'px);';
+      result = 'blur(' + (position * 3 / 100) + 'px)';
       break;
     case 'heat':
-      result = 'brightness(' + ((pinPosition * 2 / 100) + 1) + ');';
+      result = 'brightness(' + ((position * 2 / 100) + 1) + ')';
       break;
   }
 
-  // console.log(result);
   imageUploadImg.style.filter = result;
+  scaleValue.value = position;
 };
 
-scalePin.addEventListener('mouseup', setSaturation);
+var onScalePinMouseDown = function (evt) {
+  evt.preventDefault();
 
+  var startCoords = {
+    x: evt.clientX,
+    y: evt.clientY
+  };
 
-// записать нач.расстояние и конеч.состояние, и высчитать между ними разницу по x/y
-// к текущему положению блока добавить расстояние, на кот.переместился курсор мыши
+  var pinPosition = Number.parseInt(scalePin.style.left, 10);
+
+  var onMouseMove = function (moveEvt) {
+    moveEvt.preventDefault();
+
+    var shift = {
+      x: startCoords.x - moveEvt.clientX,
+      y: startCoords.y - moveEvt.clientY,
+    };
+
+    var diff = shift.x / SLIDER_WIDTH * SCALE_MAX;
+
+    diff = (pinPosition - Math.round(diff));
+
+    if (diff < 0) {
+      diff = 0;
+    } else if (diff > SCALE_MAX) {
+      diff = SCALE_MAX;
+    }
+
+    scalePin.style.left = diff + '%';
+    scaleLevel.style.width = diff + '%';
+
+    setSaturation(diff);
+  };
+
+  var onMouseUp = function (upEvt) {
+    upEvt.preventDefault();
+
+    document.removeEventListener('mousemove', onMouseMove);
+    document.removeEventListener('mouseup', onMouseUp);
+  };
+
+  document.addEventListener('mousemove', onMouseMove);
+  document.addEventListener('mouseup', onMouseUp);
+};
+
+scalePin.addEventListener('mousedown', onScalePinMouseDown);
