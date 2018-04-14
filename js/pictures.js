@@ -219,6 +219,7 @@ var onEffectsRadioClick = function (evt) {
     // сбрасываю значения слайдера
     scalePin.style.left = '100%';
     scaleLevel.style.width = '100%';
+    scaleValue.value = '100';
   };
 
   switch (evt.target) {
