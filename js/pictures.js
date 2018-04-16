@@ -193,6 +193,14 @@ var imageUploadImg = imageUploadElement.querySelector('.img-upload__preview img'
 var imageSlider = imageUploadElement.querySelector('.img-upload__scale');
 
 var onEffectsRadioClick = function (evt) {
+  // сбрасываю класс и стиль
+  imageUploadImg.className = '';
+  imageUploadImg.style = 'null';
+
+  // возвращаю на место ресайз
+  var resize = Number.parseInt(resizeControlValue.value, 10);
+  imageUploadImg.style.transform = 'scale(' + (resize / 100) + ')';
+
   var none = imageUploadEffects.querySelector('#effect-none');
   var chrome = imageUploadEffects.querySelector('#effect-chrome');
   var sepia = imageUploadEffects.querySelector('#effect-sepia');
@@ -201,14 +209,6 @@ var onEffectsRadioClick = function (evt) {
   var heat = imageUploadEffects.querySelector('#effect-heat');
 
   var setEffect = function (eff) {
-    // сбрасываю класс и стиль
-    imageUploadImg.className = '';
-    imageUploadImg.style = 'null';
-
-    // возвращаю на место ресайз
-    var resize = Number.parseInt(resizeControlValue.value, 10);
-    imageUploadImg.style.transform = 'scale(' + (resize / 100) + ')';
-
     // задаю новый класс
     var effect = 'effects__preview--' + eff;
     imageUploadImg.classList.add(effect);
@@ -224,8 +224,6 @@ var onEffectsRadioClick = function (evt) {
 
   switch (evt.target) {
     case none:
-      imageUploadImg.removeAttribute('class');
-      imageUploadImg.style = 'null';
       imageSlider.classList.add('hidden');
       break;
     case chrome:
@@ -360,3 +358,55 @@ var onScalePinMouseDown = function (evt) {
 };
 
 scalePin.addEventListener('mousedown', onScalePinMouseDown);
+
+// /////////////////////////////////////////////////////////
+
+var hashtagElement = imageUploadElement.querySelector('.text__hashtags');
+
+var checkHashtagValidity = function (evt) {
+  evt.preventDefault();
+
+  var hashtagArr = hashtagElement.value.trim().toLowerCase().split(' ');
+
+  var constraints = {
+    startsWithHash: 'хэш-тег начинается с символа # (решётка)',
+    cantBeOnlyHash: 'хеш-тег не может состоять только из одной решётки',
+    spaceSeparated: 'хэш-теги разделяются пробелами',
+    cantUseTwice: 'один и тот же хэш-тег не может быть использован дважды',
+    noMoreThanFive: 'нельзя указать больше пяти хэш-тегов',
+    maxLength: 'максимальная длина одного хэш-тега 20 символов'
+  };
+
+  var doublesNum = 0;
+  for (var a = 0; a < hashtagArr.length; a++) {
+    var double = hashtagArr[a];
+    for (var b = a + 1; b < hashtagArr.length; b++) {
+      if (double === hashtagArr[b]) {
+        double = hashtagArr[b];
+        doublesNum++;
+      }
+    }
+  }
+
+  if (hashtagArr.length > 5) {
+    hashtagElement.setCustomValidity(constraints.noMoreThanFive);
+  } else {
+    hashtagArr.forEach(function (tag) {
+      if (tag.charAt(0) !== '#') {
+        hashtagElement.setCustomValidity(constraints.startsWithHash);
+      } else if (tag === '#') {
+        hashtagElement.setCustomValidity(constraints.cantBeOnlyHash);
+      } else if (tag.includes('#', 1)) {
+        hashtagElement.setCustomValidity(constraints.spaceSeparated);
+      } else if (tag.length > 20) {
+        hashtagElement.setCustomValidity(constraints.maxLength);
+      } else if (doublesNum > 0) {
+        hashtagElement.setCustomValidity(constraints.cantUseTwice);
+      } else {
+        hashtagElement.setCustomValidity('');
+      }
+    });
+  }
+};
+
+hashtagElement.addEventListener('input', checkHashtagValidity);
