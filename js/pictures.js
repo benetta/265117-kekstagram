@@ -13,6 +13,9 @@ var RESIZE_MAX = 100;
 var SLIDER_WIDTH = 495;
 var SCALE_MAX = 100;
 
+var HASHTAGS_MAX_NUM = 5;
+var HASHTAG_MAX_LENGTH = 20;
+
 var photos = [];
 
 var COMMENTS = ['Всё отлично!',
@@ -388,7 +391,7 @@ var checkHashtagValidity = function (evt) {
     }
   }
 
-  if (hashtagArr.length > 5) {
+  if (hashtagArr.length > HASHTAGS_MAX_NUM) {
     hashtagElement.setCustomValidity(constraints.noMoreThanFive);
   } else {
     hashtagArr.forEach(function (tag) {
@@ -398,7 +401,7 @@ var checkHashtagValidity = function (evt) {
         hashtagElement.setCustomValidity(constraints.cantBeOnlyHash);
       } else if (tag.includes('#', 1)) {
         hashtagElement.setCustomValidity(constraints.spaceSeparated);
-      } else if (tag.length > 20) {
+      } else if (tag.length > HASHTAG_MAX_LENGTH) {
         hashtagElement.setCustomValidity(constraints.maxLength);
       } else if (doublesNum > 0) {
         hashtagElement.setCustomValidity(constraints.cantUseTwice);
