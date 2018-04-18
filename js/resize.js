@@ -5,7 +5,6 @@
   var RESIZE_MIN = 25;
   var RESIZE_MAX = 100;
 
-  var resizeControl = document.querySelector('.resize');
   var resizeControlValue = document.querySelector('.resize__control--value');
   var resizeControlMinus = document.querySelector('.resize__control--minus');
   var resizeControlPlus = document.querySelector('.resize__control--plus');

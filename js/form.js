@@ -6,6 +6,7 @@
 
   var uploadFile = document.querySelector('#upload-file');
   var uploadCancel = document.querySelector('#upload-cancel');
+  var hashtagElement = document.querySelector('.text__hashtags');
   var commentsInput = parentEl.querySelector('.text__description');
 
   var resizeControl = parentEl.querySelector('.resize');
@@ -26,7 +27,7 @@
     scaleValue.value = '100';
     resizeControl.style.zIndex = 1;
 
-    document.addEventListener('keydown', onUploadElementEscPress)
+    document.addEventListener('keydown', onUploadElementEscPress);
   };
 
   var onUploadCancelClick = function () {
@@ -38,11 +39,11 @@
     document.removeEventListener('keydown', onUploadElementEscPress);
   };
 
-  var onUploadElementEscPress = function(evt) {
+  var onUploadElementEscPress = function (evt) {
     if (evt.keyCode === window.common.ESC_KEY && evt.target !== hashtagElement && evt.target !== commentsInput) {
       window.common.closeWindow(parentEl, onUploadElementEscPress);
     }
-  }
+  };
 
   uploadFile.addEventListener('change', onUploadFileClick);
   uploadCancel.addEventListener('click', onUploadCancelClick);

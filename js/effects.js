@@ -1,6 +1,6 @@
 'use strict';
 
-(function (){
+(function () {
   var SLIDER_WIDTH = 495;
   var SCALE_MAX = 100;
 
@@ -144,4 +144,4 @@
   };
 
   scalePin.addEventListener('mousedown', onScalePinMouseDown);
-  })();
+})();

@@ -2,7 +2,7 @@
 
 (function () {
   window.common = {
-    closeWindow: function(el, func) {
+    closeWindow: function (el, func) {
       el.classList.add('hidden');
       document.removeEventListener('keydown', func);
     },
@@ -14,6 +14,6 @@
       return num;
     },
     imageUploadElement: document.querySelector('.img-upload__overlay'),
-    imageUploadImg: parentEl.querySelector('.img-upload__preview img')
+    imageUploadImg: document.querySelector('.img-upload__preview img')
   };
 })();

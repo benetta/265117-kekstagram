@@ -58,11 +58,11 @@
     document.addEventListener('keydown', onBigPictureEscPress);
   };
 
-  var onBigPictureEscPress = function(evt) {
-    if(evt.keyCode === window.common.ESC_KEY) {
+  var onBigPictureEscPress = function (evt) {
+    if (evt.keyCode === window.common.ESC_KEY) {
       window.common.closeWindow(bigPicture, onBigPictureEscPress);
     }
-  }
+  };
 
   // обработчики для фото
   pictureLinks.forEach(function (picture) {
