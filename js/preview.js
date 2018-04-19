@@ -58,9 +58,14 @@
     document.addEventListener('keydown', onBigPictureEscPress);
   };
 
+  var closeWindow = function () {
+    bigPicture.classList.add('hidden');
+    document.removeEventListener('keydown', onBigPictureEscPress);
+  }
+
   var onBigPictureEscPress = function (evt) {
     if (evt.keyCode === window.common.ESC_KEY) {
-      window.common.closeWindow(bigPicture, onBigPictureEscPress);
+      closeWindow();
     }
   };
 
@@ -69,8 +74,5 @@
     picture.addEventListener('click', onPhotoClick);
   });
 
-  bigPictureClose.addEventListener('click', function () {
-    bigPicture.classList.add('hidden');
-    document.removeEventListener('keydown', onBigPictureEscPress);
-  });
+  bigPictureClose.addEventListener('click', closeWindow);
 })();

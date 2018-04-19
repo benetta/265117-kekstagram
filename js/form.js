@@ -41,7 +41,7 @@
 
   var onUploadElementEscPress = function (evt) {
     if (evt.keyCode === window.common.ESC_KEY && evt.target !== hashtagElement && evt.target !== commentsInput) {
-      window.common.closeWindow(parentEl, onUploadElementEscPress);
+      onUploadCancelClick();
     }
   };
 
