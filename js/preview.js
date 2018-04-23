@@ -61,7 +61,7 @@
   var closeWindow = function () {
     bigPicture.classList.add('hidden');
     document.removeEventListener('keydown', onBigPictureEscPress);
-  }
+  };
 
   var onBigPictureEscPress = function (evt) {
     if (evt.keyCode === window.common.ESC_KEY) {
