@@ -57,10 +57,6 @@
   uploadFile.addEventListener('change', onUploadFileClick);
   uploadCancel.addEventListener('click', onUploadCancelClick);
 
-  var onError = function (error) {
-    console.error(error);
-  };
-
   // можно передать response, чтобы посмотреть ответ
   var onLoad = function () {
     clearForm(true);
@@ -68,7 +64,7 @@
 
   var formElement = document.querySelector('#upload-select-image');
   formElement.addEventListener('submit', function (evt) {
-    window.common.sendData(new FormData(formElement), onLoad, onError);
+    window.common.sendData(new FormData(formElement), onLoad, window.common.onError);
     evt.preventDefault();
   });
 })();

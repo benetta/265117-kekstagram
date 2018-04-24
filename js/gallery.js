@@ -1,10 +1,6 @@
 'use strict';
 
 (function () {
-  var onError = function (message) {
-    console.error(message);
-  };
-
   var onLoad = function (data) {
     window.common.photos = data;
 
@@ -13,7 +9,7 @@
   };
 
   // получаем данные
-  window.common.getData('https://js.dump.academy/kekstagram/data', onLoad, onError);
+  window.common.getData('https://js.dump.academy/kekstagram/data', onLoad, window.common.onError);
 
   // начинаем рендер
   var pictureList = document.querySelector('.pictures');

@@ -1250,3 +1250,17 @@ main {
     grid-row: 1 / span 3;
   }
 }
+
+.error {
+  position: fixed;
+  top: 30%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-radius: 5px;
+  padding: 20px 50px;
+  background-color: #ff0001;
+  color: #ffffff;
+  font-weight: bold;
+  font-size: 24px;
+  z-index: 10;
+}
