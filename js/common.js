@@ -4,6 +4,8 @@
   var ESC_KEY = 27;
   var PHOTOS_MAX = 25;
 
+  var photos;
+
   var imageUploadElement = document.querySelector('.img-upload__overlay');
   var imageUploadImg = document.querySelector('.img-upload__preview img');
 
@@ -18,11 +20,28 @@
     return num;
   };
 
+  var picturesTemplate = document.querySelector('#picture').content.querySelector('.picture__link');
+
+  var renderPhoto = function (num) {
+    var photoElement = picturesTemplate.cloneNode(true);
+
+    photoElement.querySelector('.picture__img').src = window.common.photos[num].url;
+    photoElement.querySelector('.picture__stat--likes').textContent = window.common.photos[num].likes;
+    photoElement.querySelector('.picture__stat--comments').textContent = window.common.photos[num].comments.length;
+    photoElement.querySelector('.picture__img').dataset.id = num;
+
+    return photoElement;
+  };
+
   window.common = {
     ESC_KEY: ESC_KEY,
     PHOTOS_MAX: PHOTOS_MAX,
-    photos: [],
+
+    photos: photos,
+
     getRandomNum: getRandomNum,
+    renderPhoto: renderPhoto,
+
     imageUploadElement: imageUploadElement,
     imageUploadImg: imageUploadImg
   };

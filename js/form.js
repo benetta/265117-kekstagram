@@ -18,23 +18,32 @@
   var scaleLevel = parentEl.querySelector('.scale__level');
   var scaleValue = parentEl.querySelector('.scale__value');
 
-  var onUploadFileClick = function () {
-    parentEl.classList.remove('hidden');
+  var clearForm = function (close) {
     resizeControlValue.value = '100%';
     imageSlider.classList.add('hidden');
     scalePin.style.left = '100%';
     scaleLevel.style.width = '100%';
     scaleValue.value = '100';
+    imagePreview.removeAttribute('style');
+    imagePreview.removeAttribute('class');
+    hashtagElement.value = '';
+
+    if (close) {
+      parentEl.classList.add('hidden');
+      uploadFile.value = '';
+    }
+  };
+
+  var onUploadFileClick = function () {
+    clearForm(false);
+    parentEl.classList.remove('hidden');
     resizeControl.style.zIndex = 1;
 
     document.addEventListener('keydown', onUploadElementEscPress);
   };
 
   var onUploadCancelClick = function () {
-    parentEl.classList.add('hidden');
-    imagePreview.removeAttribute('style');
-    imagePreview.removeAttribute('class');
-    uploadFile.value = '';
+    clearForm(true);
 
     document.removeEventListener('keydown', onUploadElementEscPress);
   };
@@ -47,4 +56,19 @@
 
   uploadFile.addEventListener('change', onUploadFileClick);
   uploadCancel.addEventListener('click', onUploadCancelClick);
+
+  var onError = function (error) {
+    console.error(error);
+  };
+
+  // можно передать response, чтобы посмотреть ответ
+  var onLoad = function () {
+    clearForm(true);
+  };
+
+  var formElement = document.querySelector('#upload-select-image');
+  formElement.addEventListener('submit', function (evt) {
+    window.common.sendData(new FormData(formElement), onLoad, onError);
+    evt.preventDefault();
+  });
 })();
