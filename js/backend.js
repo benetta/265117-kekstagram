@@ -1,20 +1,8 @@
 'use strict';
 
 (function () {
-  var body = document.querySelector('body');
-
-  window.common.onError = function (message) {
-    // запретить клики?
-
-    var errorElement = document.createElement('div');
-    errorElement.classList.add('error');
-    errorElement.textContent = message;
-
-    body.appendChild(errorElement);
-  };
-
   // получаем данные с сервера
-  window.common.getData = function (url, onLoad, onError) {
+  var getData = function (url, onLoad, onError) {
     var xhr = new XMLHttpRequest();
     xhr.responseType = 'json';
 
@@ -58,7 +46,7 @@
 
   var sendUrl = 'https://js.dump.academy/kekstagram';
 
-  window.common.sendData = function (data, onLoad, onError) {
+  var sendData = function (data, onLoad, onError) {
     var xhr = new XMLHttpRequest();
     xhr.responseType = 'json';
 
@@ -72,5 +60,10 @@
 
     xhr.open('POST', sendUrl);
     xhr.send(data);
+  };
+
+  window.backend = {
+    getData: getData,
+    sendData: sendData
   };
 })();

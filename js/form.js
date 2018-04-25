@@ -64,7 +64,7 @@
 
   var formElement = document.querySelector('#upload-select-image');
   formElement.addEventListener('submit', function (evt) {
-    window.common.sendData(new FormData(formElement), onLoad, window.common.onError);
+    window.backend.sendData(new FormData(formElement), onLoad, window.common.onError);
     evt.preventDefault();
   });
 })();

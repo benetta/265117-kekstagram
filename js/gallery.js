@@ -9,7 +9,7 @@
   };
 
   // получаем данные
-  window.common.getData('https://js.dump.academy/kekstagram/data', onLoad, window.common.onError);
+  window.backend.getData('https://js.dump.academy/kekstagram/data', onLoad, window.common.onError);
 
   // начинаем рендер
   var pictureList = document.querySelector('.pictures');

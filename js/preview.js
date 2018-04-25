@@ -70,7 +70,6 @@
   };
 
   // обработчики для фото
-  // нужно чтобы эта хреновина срабатывала только после отрисовки галереи
 
   window.common.renderPreviewListeners = function () {
     window.common.pictureLinks.forEach(function (picture) {
