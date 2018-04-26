@@ -9,7 +9,7 @@
   };
 
   // получаем данные
-  window.backend.getData(window.backend.GET_URL, onLoad, window.common.onError);
+  window.backend.getData(onLoad, window.common.onError);
 
   // начинаем рендер
   var pictureList = document.querySelector('.pictures');

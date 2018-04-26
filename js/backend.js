@@ -6,7 +6,7 @@
   var POST_URL = 'https://js.dump.academy/kekstagram';
 
   // получаем данные с сервера
-  var getData = function (url, onLoad, onError) {
+  var getData = function (onLoad, onError) {
     var xhr = new XMLHttpRequest();
     xhr.responseType = 'json';
 
@@ -44,7 +44,7 @@
 
     xhr.timeout = TIMEOUT;
 
-    xhr.open('GET', url);
+    xhr.open('GET', GET_URL);
     xhr.send();
   };
 
@@ -66,7 +66,6 @@
 
   window.backend = {
     getData: getData,
-    sendData: sendData,
-    GET_URL: GET_URL
+    sendData: sendData
   };
 })();
