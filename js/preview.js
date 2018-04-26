@@ -5,7 +5,6 @@
 
   var bigPicture = document.querySelector('.big-picture');
   var bigPictureClose = bigPicture.querySelector('#picture-cancel');
-  var pictureLinks = document.querySelectorAll('.picture__link');
   var commentsContainer = document.querySelector('.social__comments');
 
   // прячем блоки
@@ -43,7 +42,7 @@
     bigPicture.classList.remove('hidden');
 
     bigPicture.querySelector('.big-picture__img img').src = photo.url;
-    bigPicture.querySelector('.social__caption').textContent = photo.description;
+    bigPicture.querySelector('.social__caption').textContent = photo.comments[0];
     bigPicture.querySelector('.likes-count').textContent = photo.likes;
     bigPicture.querySelector('.comments-count').textContent = photo.comments.length;
 
@@ -52,25 +51,31 @@
     }
 
     for (var k = 0; (k < photo.comments.length) && (k < 2); k++) {
-      commentsContainer.appendChild(renderComment(k, photoId));
+      var commentId = (photo.comments.length - 1) - k;
+      commentsContainer.appendChild(renderComment(commentId, photoId));
     }
 
     document.addEventListener('keydown', onBigPictureEscPress);
   };
 
+  var closeWindow = function () {
+    bigPicture.classList.add('hidden');
+    document.removeEventListener('keydown', onBigPictureEscPress);
+  };
+
   var onBigPictureEscPress = function (evt) {
     if (evt.keyCode === window.common.ESC_KEY) {
-      window.common.closeWindow(bigPicture, onBigPictureEscPress);
+      closeWindow();
     }
   };
 
   // обработчики для фото
-  pictureLinks.forEach(function (picture) {
-    picture.addEventListener('click', onPhotoClick);
-  });
 
-  bigPictureClose.addEventListener('click', function () {
-    bigPicture.classList.add('hidden');
-    document.removeEventListener('keydown', onBigPictureEscPress);
-  });
+  window.common.renderPreviewListeners = function () {
+    window.common.pictureLinks.forEach(function (picture) {
+      picture.addEventListener('click', onPhotoClick);
+    });
+  };
+
+  bigPictureClose.addEventListener('click', closeWindow);
 })();

@@ -1,6 +1,16 @@
 'use strict';
 
 (function () {
+  var onLoad = function (data) {
+    window.common.photos = data;
+
+    renderGallery();
+    window.common.renderPreviewListeners();
+  };
+
+  // получаем данные
+  window.backend.getData(onLoad, window.common.onError);
+
   // начинаем рендер
   var pictureList = document.querySelector('.pictures');
   var picturesTemplate = document.querySelector('#picture').content.querySelector('.picture__link');
@@ -18,9 +28,13 @@
 
   var fragment = document.createDocumentFragment();
 
-  for (var n = 0; n < window.common.PHOTOS_MAX; n++) {
-    fragment.appendChild(renderPhoto(n));
-  }
+  var renderGallery = function () {
+    for (var n = 0; n < window.common.PHOTOS_MAX; n++) {
+      fragment.appendChild(renderPhoto(n));
+    }
 
-  pictureList.appendChild(fragment);
+    pictureList.appendChild(fragment);
+    window.common.pictureLinks = document.querySelectorAll('.picture__link');
+  };
+
 })();
