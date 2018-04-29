@@ -1,6 +1,8 @@
 'use strict';
 
 (function () {
+  var DEBOUNCE_INTERVAL = 300;
+
   var onLoad = function (data) {
     window.common.photos = data;
 
@@ -115,6 +117,16 @@
     }
   };
 
-  filtersFormElement.addEventListener('click', sortPhotos);
+  var lastTimeout;
+  var debounce = function (func) {
+    if (lastTimeout) {
+      window.clearTimeout(lastTimeout);
+    }
+    lastTimeout = window.setTimeout(func, DEBOUNCE_INTERVAL);
+  };
+
+  filtersFormElement.addEventListener('click', function (evt) {
+    debounce(sortPhotos(evt));
+  });
 
 })();
