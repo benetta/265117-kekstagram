@@ -48,11 +48,9 @@
 
   var sortPhotos = function (evt) {
     var typeOfFilter = evt.target.id;
-    var currentFilter = document.querySelector('.img-filters__button--active');
+
 
     var photosCopy = Array.from(window.common.photos).slice(0, window.common.PHOTOS_MAX);
-
-    // при измненении порядка фото, должны изменяться и их id
 
     var deletePhotos = function () {
       for (var i = window.common.photos.length; i > 1; i--) {
@@ -106,27 +104,28 @@
         break;
     }
 
-
     deletePhotos();
     renderGallery(photosCopy);
     window.common.renderPreviewListeners();
+  };
+
+  var lastTimeout;
+
+  var onFiltersClick = function (evt) {
+    var currentFilter = document.querySelector('.img-filters__button--active');
 
     evt.target.classList.add('img-filters__button--active');
     if (evt.target !== currentFilter) {
       currentFilter.classList.remove('img-filters__button--active');
     }
-  };
 
-  var lastTimeout;
-  var debounce = function (func) {
     if (lastTimeout) {
-      window.clearTimeout(lastTimeout);
+      clearTimeout(lastTimeout);
     }
-    lastTimeout = window.setTimeout(func, DEBOUNCE_INTERVAL);
+    lastTimeout = setTimeout(function () {
+      sortPhotos(evt);
+    }, DEBOUNCE_INTERVAL);
   };
 
-  filtersFormElement.addEventListener('click', function (evt) {
-    debounce(sortPhotos(evt));
-  });
-
+  filtersFormElement.addEventListener('click', onFiltersClick);
 })();
