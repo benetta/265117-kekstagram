@@ -36,8 +36,6 @@
   var body = document.querySelector('body');
 
   var onError = function (message) {
-    // запретить клики?
-
     var errorElement = document.createElement('div');
     errorElement.classList.add('error');
     errorElement.textContent = message;

@@ -36,7 +36,7 @@
   };
 
   var onPhotoClick = function (evt) {
-    var photoId = evt.target.dataset.id;
+    var photoId = evt.currentTarget.dataset.id - 1;
     var photo = window.common.photos[photoId];
 
     bigPicture.classList.remove('hidden');
