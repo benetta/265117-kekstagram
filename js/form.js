@@ -66,17 +66,19 @@
 
   var errorElement = document.querySelector('.img-upload__message--error');
 
-  var onError = function (err) {
+  var onError = function (status) {
+    var error = window.common.setMessage(status);
+
     errorElement.classList.remove('hidden');
 
-    var errText = document.createTextNode(err);
+    var errText = document.createTextNode(error);
     errorElement.replaceChild(errText, errorElement.firstChild);
   };
 
   var onSubmitClick = function (evt) {
     evt.preventDefault();
 
-    window.backend.getData(onLoad, onError, new FormData(formElement));
+    window.backend.sendData(new FormData(formElement), onLoad, onError);
   };
 
   formElement.addEventListener('submit', onSubmitClick);

@@ -4,49 +4,23 @@
   var TIMEOUT = 5000;
   var GET_URL = 'https://js.dump.academy/kekstagram/data';
   var POST_URL = 'https://js.dump.academy/kekstagram';
+  var SUCCESS = 200;
 
-  var Code = {
-    SUCCESS: 200,
-    BAD_REQUEST: 400,
-    NOT_FOUND: 404,
-    INTERNAL: 500,
-    BAD_GETAWAY: 502,
-    SERVICE_UNAVAILABLE: 503
-  };
 
-  // получаем данные с сервера
-  var getData = function (onLoad, onError) {
+  var createRequest = function (type, url, data, onLoad, onError) {
     var xhr = new XMLHttpRequest();
     xhr.responseType = 'json';
 
     xhr.addEventListener('load', function () {
-      var error;
 
-      switch (xhr.status) {
-        case Code.SUCCESS:
+      if (xhr.status === SUCCESS) {
+        if (!data) {
           onLoad(xhr.response);
-          break;
-        case Code.BAD_REQUEST:
-          error = 'Неверный запрос';
-          break;
-        case Code.NOT_FOUND:
-          error = 'Ничего не найдено';
-          break;
-        case Code.INTERNAL:
-          error = 'Внутренняя ошибка сервера';
-          break;
-        case Code.BAD_GETAWAY:
-          error = 'Плохой шлюз';
-          break;
-        case Code.SERVICE_UNAVAILABLE:
-          error = 'Сервис недоступен';
-          break;
-        default:
-          error = 'Статус ответа: ' + xhr.status + ' ' + xhr.statusText;
-      }
-
-      if (error) {
-        onError(error);
+        } else {
+          onLoad();
+        }
+      } else {
+        onError(xhr.status);
       }
     });
 
@@ -60,51 +34,21 @@
 
     xhr.timeout = TIMEOUT;
 
-    xhr.open('GET', GET_URL);
-    xhr.send();
+    xhr.open(type, url);
+
+    if (data) {
+      xhr.send(data);
+    } else {
+      xhr.send();
+    }
+  };
+
+  var getData = function (onLoad, onError) {
+    createRequest('GET', GET_URL, false, onLoad, onError);
   };
 
   var sendData = function (data, onLoad, onError) {
-    var xhr = new XMLHttpRequest();
-    xhr.responseType = 'json';
-
-    xhr.addEventListener('load', function () {
-      var error;
-
-      switch (xhr.status) {
-        case Code.SUCCESS:
-          onLoad(xhr.response);
-          break;
-        case Code.BAD_REQUEST:
-          error = 'Неверный запрос';
-          break;
-        case Code.NOT_FOUND:
-          error = 'Ничего не найдено';
-          break;
-        case Code.INTERNAL:
-          error = 'Внутренняя ошибка сервера';
-          break;
-        case Code.BAD_GETAWAY:
-          error = 'Плохой шлюз';
-          break;
-        case Code.SERVICE_UNAVAILABLE:
-          error = 'Сервис недоступен';
-          break;
-        default:
-          error = 'Статус ответа: ' + xhr.status + ' ' + xhr.statusText;
-      }
-
-      if (error) {
-        onError(error);
-      }
-    });
-
-    xhr.addEventListener('error', function () {
-      onError('Произошла ошибка соединения');
-    });
-
-    xhr.open('POST', POST_URL);
-    xhr.send(data);
+    createRequest('POST', POST_URL, data, onLoad, onError);
   };
 
   window.backend = {
