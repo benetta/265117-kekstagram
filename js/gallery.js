@@ -2,7 +2,6 @@
 
 (function () {
   var DEBOUNCE_INTERVAL = 500;
-
   var onLoad = function (data) {
     window.common.photos = data;
 

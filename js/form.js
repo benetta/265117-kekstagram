@@ -1,6 +1,8 @@
 'use strict';
 
 (function () {
+  var formElement = document.querySelector('#upload-select-image');
+
   var parentEl = window.common.imageUploadElement;
   var imagePreview = window.common.imageUploadImg;
 
@@ -27,6 +29,7 @@
     imagePreview.removeAttribute('style');
     imagePreview.removeAttribute('class');
     hashtagElement.value = '';
+    hashtagElement.style = null;
 
     if (close) {
       parentEl.classList.add('hidden');
@@ -57,14 +60,24 @@
   uploadFile.addEventListener('change', onUploadFileClick);
   uploadCancel.addEventListener('click', onUploadCancelClick);
 
-  // можно передать response, чтобы посмотреть ответ
   var onLoad = function () {
     clearForm(true);
   };
 
-  var formElement = document.querySelector('#upload-select-image');
-  formElement.addEventListener('submit', function (evt) {
-    window.backend.sendData(new FormData(formElement), onLoad, window.common.onError);
+  var errorElement = document.querySelector('.img-upload__message--error');
+
+  var onError = function (err) {
+    errorElement.classList.remove('hidden');
+
+    var errText = document.createTextNode(err);
+    errorElement.replaceChild(errText, errorElement.firstChild);
+  };
+
+  var onSubmitClick = function (evt) {
     evt.preventDefault();
-  });
+
+    window.backend.getData(onLoad, onError, new FormData(formElement));
+  };
+
+  formElement.addEventListener('submit', onSubmitClick);
 })();

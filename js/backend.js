@@ -5,6 +5,15 @@
   var GET_URL = 'https://js.dump.academy/kekstagram/data';
   var POST_URL = 'https://js.dump.academy/kekstagram';
 
+  var Code = {
+    SUCCESS: 200,
+    BAD_REQUEST: 400,
+    NOT_FOUND: 404,
+    INTERNAL: 500,
+    BAD_GETAWAY: 502,
+    SERVICE_UNAVAILABLE: 503
+  };
+
   // получаем данные с сервера
   var getData = function (onLoad, onError) {
     var xhr = new XMLHttpRequest();
@@ -12,18 +21,25 @@
 
     xhr.addEventListener('load', function () {
       var error;
+
       switch (xhr.status) {
-        case 200:
+        case Code.SUCCESS:
           onLoad(xhr.response);
           break;
-        case 400:
+        case Code.BAD_REQUEST:
           error = 'Неверный запрос';
           break;
-        case 401:
-          error = 'Пользователь не авторизован';
-          break;
-        case 404:
+        case Code.NOT_FOUND:
           error = 'Ничего не найдено';
+          break;
+        case Code.INTERNAL:
+          error = 'Внутренняя ошибка сервера';
+          break;
+        case Code.BAD_GETAWAY:
+          error = 'Плохой шлюз';
+          break;
+        case Code.SERVICE_UNAVAILABLE:
+          error = 'Сервис недоступен';
           break;
         default:
           error = 'Статус ответа: ' + xhr.status + ' ' + xhr.statusText;
@@ -39,7 +55,7 @@
     });
 
     xhr.addEventListener('timeout', function () {
-      onError('Зарос не успел выполниться за ' + xhr.timeout + 'мс');
+      onError('Запрос не успел выполниться за ' + xhr.timeout + 'мс');
     });
 
     xhr.timeout = TIMEOUT;
@@ -53,7 +69,34 @@
     xhr.responseType = 'json';
 
     xhr.addEventListener('load', function () {
-      onLoad(xhr.response);
+      var error;
+
+      switch (xhr.status) {
+        case Code.SUCCESS:
+          onLoad(xhr.response);
+          break;
+        case Code.BAD_REQUEST:
+          error = 'Неверный запрос';
+          break;
+        case Code.NOT_FOUND:
+          error = 'Ничего не найдено';
+          break;
+        case Code.INTERNAL:
+          error = 'Внутренняя ошибка сервера';
+          break;
+        case Code.BAD_GETAWAY:
+          error = 'Плохой шлюз';
+          break;
+        case Code.SERVICE_UNAVAILABLE:
+          error = 'Сервис недоступен';
+          break;
+        default:
+          error = 'Статус ответа: ' + xhr.status + ' ' + xhr.statusText;
+      }
+
+      if (error) {
+        onError(error);
+      }
     });
 
     xhr.addEventListener('error', function () {

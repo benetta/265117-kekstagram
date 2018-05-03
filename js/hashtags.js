@@ -3,11 +3,10 @@
 (function () {
   var HASHTAGS_MAX_NUM = 5;
   var HASHTAG_MAX_LENGTH = 20;
+
   var hashtagElement = document.querySelector('.text__hashtags');
 
-  var checkHashtagValidity = function (evt) {
-    evt.preventDefault();
-
+  var checkHashtagValidity = function () {
     var hashtagArr = hashtagElement.value.trim().toLowerCase().split(' ');
 
     var constraints = {
@@ -30,26 +29,38 @@
       }
     }
 
+    var message = '';
+
     if (hashtagArr.length > HASHTAGS_MAX_NUM) {
-      hashtagElement.setCustomValidity(constraints.noMoreThanFive);
+      message = constraints.noMoreThanFive;
     } else {
       hashtagArr.forEach(function (tag) {
         if (tag.charAt(0) !== '#') {
-          hashtagElement.setCustomValidity(constraints.startsWithHash);
+          message = constraints.startsWithHash;
         } else if (tag === '#') {
-          hashtagElement.setCustomValidity(constraints.cantBeOnlyHash);
+          message = constraints.cantBeOnlyHash;
         } else if (tag.includes('#', 1)) {
-          hashtagElement.setCustomValidity(constraints.spaceSeparated);
+          message = constraints.spaceSeparated;
         } else if (tag.length > HASHTAG_MAX_LENGTH) {
-          hashtagElement.setCustomValidity(constraints.maxLength);
+          message = constraints.maxLength;
         } else if (doublesNum > 0) {
-          hashtagElement.setCustomValidity(constraints.cantUseTwice);
-        } else {
-          hashtagElement.setCustomValidity('');
+          message = constraints.cantUseTwice;
         }
       });
     }
+
+    return message;
   };
 
-  hashtagElement.addEventListener('input', checkHashtagValidity);
+  hashtagElement.addEventListener('input', function () {
+    var message = checkHashtagValidity();
+
+    if (message !== '') {
+      hashtagElement.setCustomValidity(message);
+      hashtagElement.style.border = '1px solid red';
+    } else {
+      hashtagElement.setCustomValidity(message);
+      hashtagElement.style = null;
+    }
+  });
 })();
