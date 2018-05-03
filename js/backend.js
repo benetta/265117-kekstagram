@@ -4,33 +4,23 @@
   var TIMEOUT = 5000;
   var GET_URL = 'https://js.dump.academy/kekstagram/data';
   var POST_URL = 'https://js.dump.academy/kekstagram';
+  var SUCCESS = 200;
 
-  // получаем данные с сервера
-  var getData = function (onLoad, onError) {
+
+  var createRequest = function (type, url, data, onLoad, onError) {
     var xhr = new XMLHttpRequest();
     xhr.responseType = 'json';
 
     xhr.addEventListener('load', function () {
-      var error;
-      switch (xhr.status) {
-        case 200:
-          onLoad(xhr.response);
-          break;
-        case 400:
-          error = 'Неверный запрос';
-          break;
-        case 401:
-          error = 'Пользователь не авторизован';
-          break;
-        case 404:
-          error = 'Ничего не найдено';
-          break;
-        default:
-          error = 'Статус ответа: ' + xhr.status + ' ' + xhr.statusText;
-      }
 
-      if (error) {
-        onError(error);
+      if (xhr.status === SUCCESS) {
+        if (!data) {
+          onLoad(xhr.response);
+        } else {
+          onLoad();
+        }
+      } else {
+        onError(xhr.status);
       }
     });
 
@@ -39,29 +29,26 @@
     });
 
     xhr.addEventListener('timeout', function () {
-      onError('Зарос не успел выполниться за ' + xhr.timeout + 'мс');
+      onError('Запрос не успел выполниться за ' + xhr.timeout + 'мс');
     });
 
     xhr.timeout = TIMEOUT;
 
-    xhr.open('GET', GET_URL);
-    xhr.send();
+    xhr.open(type, url);
+
+    if (data) {
+      xhr.send(data);
+    } else {
+      xhr.send();
+    }
+  };
+
+  var getData = function (onLoad, onError) {
+    createRequest('GET', GET_URL, false, onLoad, onError);
   };
 
   var sendData = function (data, onLoad, onError) {
-    var xhr = new XMLHttpRequest();
-    xhr.responseType = 'json';
-
-    xhr.addEventListener('load', function () {
-      onLoad(xhr.response);
-    });
-
-    xhr.addEventListener('error', function () {
-      onError('Произошла ошибка соединения');
-    });
-
-    xhr.open('POST', POST_URL);
-    xhr.send(data);
+    createRequest('POST', POST_URL, data, onLoad, onError);
   };
 
   window.backend = {

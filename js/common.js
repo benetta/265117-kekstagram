@@ -33,14 +33,41 @@
     return photoElement;
   };
 
-  var body = document.querySelector('body');
+  var Code = {
+    BAD_REQUEST: 400,
+    NOT_FOUND: 404,
+    INTERNAL: 500,
+    BAD_GETAWAY: 502,
+    SERVICE_UNAVAILABLE: 503
+  };
 
-  var onError = function (message) {
-    var errorElement = document.createElement('div');
-    errorElement.classList.add('error');
-    errorElement.textContent = message;
+  var setMessage = function (status) {
+    if (typeof (status) !== 'number') {
+      return status;
+    }
+    var error;
 
-    body.appendChild(errorElement);
+    switch (status) {
+      case Code.BAD_REQUEST:
+        error = 'Неверный запрос';
+        break;
+      case Code.NOT_FOUND:
+        error = 'Ничего не найдено';
+        break;
+      case Code.INTERNAL:
+        error = 'Внутренняя ошибка сервера';
+        break;
+      case Code.BAD_GETAWAY:
+        error = 'Плохой шлюз';
+        break;
+      case Code.SERVICE_UNAVAILABLE:
+        error = 'Сервис недоступен';
+        break;
+      default:
+        error = 'Статус ответа: ' + status;
+    }
+
+    return error;
   };
 
   window.common = {
@@ -51,7 +78,7 @@
 
     getRandomNum: getRandomNum,
     renderPhoto: renderPhoto,
-    onError: onError,
+    setMessage: setMessage,
 
     imageUploadElement: imageUploadElement,
     imageUploadImg: imageUploadImg

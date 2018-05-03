@@ -2,6 +2,7 @@
 
 (function () {
   var DEBOUNCE_INTERVAL = 500;
+  var body = document.querySelector('body');
 
   var onLoad = function (data) {
     window.common.photos = data;
@@ -11,8 +12,18 @@
     filtersElement.classList.remove('img-filters--inactive');
   };
 
+  var onError = function (status) {
+    var error = window.common.setMessage(status);
+
+    var errorElement = document.createElement('div');
+    errorElement.classList.add('error');
+    errorElement.textContent = error;
+
+    body.appendChild(errorElement);
+  };
+
   // получаем данные
-  window.backend.getData(onLoad, window.common.onError);
+  window.backend.getData(onLoad, onError);
 
   // начинаем рендер
   var pictureList = document.querySelector('.pictures');
