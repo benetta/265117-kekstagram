@@ -4,26 +4,17 @@
   var SLIDER_WIDTH = 495;
   var SCALE_MAX = 100;
 
-  var imageEl = window.common.imageUploadElement;
   var imagePreview = window.common.imageUploadImg;
-  var imageUploadEffects = imageEl.querySelector('.effects__list');
-  var imageSlider = imageEl.querySelector('.img-upload__scale');
+  var imageUploadEffects = document.querySelector('.effects__list');
+  var imageSlider = document.querySelector('.img-upload__scale');
 
-  var scalePin = imageEl.querySelector('.scale__pin');
-  var scaleLevel = imageEl.querySelector('.scale__level');
-  var scaleValue = imageEl.querySelector('.scale__value');
+  var scalePin = document.querySelector('.scale__pin');
+  var scaleLevel = document.querySelector('.scale__level');
+  var scaleValue = document.querySelector('.scale__value');
 
-  var resizeControlValue = imageEl.querySelector('.resize__control--value');
+  var resizeControlValue = document.querySelector('.resize__control--value');
 
   var onEffectsRadioClick = function (evt) {
-    // сбрасываю класс и стиль
-    imagePreview.className = '';
-    imagePreview.style = 'null';
-
-    // возвращаю на место ресайз
-    var resize = Number.parseInt(resizeControlValue.value, 10);
-    imagePreview.style.transform = 'scale(' + (resize / 100) + ')';
-
     var none = imageUploadEffects.querySelector('#effect-none');
     var chrome = imageUploadEffects.querySelector('#effect-chrome');
     var sepia = imageUploadEffects.querySelector('#effect-sepia');
@@ -32,22 +23,36 @@
     var heat = imageUploadEffects.querySelector('#effect-heat');
 
     var setEffect = function (eff) {
-      // задаю новый класс
-      var effect = 'effects__preview--' + eff;
-      imagePreview.classList.add(effect);
+      var effects = ['chrome', 'sepia', 'marvin', 'phobos', 'heat'];
 
-      // показываю слайдер
-      imageSlider.classList.remove('hidden');
+      if (eff) {
+        imagePreview.className = '';
+        imagePreview.style = 'null';
 
-      // сбрасываю значения слайдера
-      scalePin.style.left = '100%';
-      scaleLevel.style.width = '100%';
-      scaleValue.value = '100';
+        // сбрасываю значения слайдера
+        scalePin.style.left = '100%';
+        scaleLevel.style.width = '100%';
+        scaleValue.value = '100';
+      }
+
+      if (eff === 'none') {
+        imageSlider.classList.add('hidden');
+      } else if (effects.includes(eff)) {
+        var effect = 'effects__preview--' + eff;
+        imagePreview.classList.add(effect);
+
+        // показываю слайдер
+        imageSlider.classList.remove('hidden');
+      }
+
+      // возвращаю на место ресайз
+      var resize = Number.parseInt(resizeControlValue.value, 10);
+      imagePreview.style.transform = 'scale(' + (resize / 100) + ')';
     };
 
     switch (evt.target) {
       case none:
-        imageSlider.classList.add('hidden');
+        setEffect('none');
         break;
       case chrome:
         setEffect('chrome');
@@ -63,6 +68,9 @@
         break;
       case heat:
         setEffect('heat');
+        break;
+      default:
+        setEffect(false);
         break;
     }
   };

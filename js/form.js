@@ -29,6 +29,7 @@
     imagePreview.removeAttribute('style');
     imagePreview.removeAttribute('class');
     hashtagElement.value = '';
+    commentsInput.value = '';
     hashtagElement.style = null;
 
     if (close) {

@@ -60,11 +60,10 @@
   var sortPhotos = function (evt) {
     var typeOfFilter = evt.target.id;
 
-
     var photosCopy = Array.from(window.common.photos).slice(0, window.common.PHOTOS_MAX);
 
     var deletePhotos = function () {
-      for (var i = window.common.photos.length; i > 1; i--) {
+      for (var i = window.common.photos.length; i > 0; i--) {
         pictureList.removeChild(pictureList.lastElementChild);
       }
     };
