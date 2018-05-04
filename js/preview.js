@@ -1,12 +1,16 @@
 'use strict';
 
 (function () {
+  var ENTER_KEY = 13;
   var AVATARS_MAX = 6;
+  var COMMENTS_MIN = 5;
 
   var bodyElement = document.querySelector('body');
   var bigPicture = document.querySelector('.big-picture');
   var bigPictureClose = bigPicture.querySelector('#picture-cancel');
   var commentsContainer = document.querySelector('.social__comments');
+  var loadMoreButton = document.querySelector('.social__comment-loadmore');
+  var commentsCount = document.querySelector('.social__comment-count');
 
   /**
    * генерируем комментарий к большому фото
@@ -32,6 +36,35 @@
     return commentElement;
   };
 
+  var loadComments = function (amount) {
+    var step;
+    var id = bigPicture.dataset.id - 1;
+    var photo = window.common.photos[id];
+    var commentsLoaded = amount;
+
+    if (photo.comments.length - commentsLoaded > 5) {
+      step = 5;
+    } else {
+      step = photo.comments.length - commentsLoaded;
+    }
+
+    for (var j = 0; j < step; j++) {
+      var commentId = ((photo.comments.length - 1) - commentsLoaded) - j;
+      commentsContainer.appendChild(renderComment(commentId, id));
+    }
+
+    commentsLoaded = commentsLoaded + step;
+    if (commentsLoaded > photo.comments.length) {
+      commentsLoaded = photo.comments.length;
+    }
+
+    commentsCount.firstChild.textContent = commentsLoaded + ' из ';
+
+    if (commentsLoaded === photo.comments.length) {
+      loadMoreButton.classList.add('hidden');
+    }
+  };
+
   var onPhotoClick = function (evt) {
     var photoId = evt.currentTarget.dataset.id - 1;
     var photo = window.common.photos[photoId];
@@ -43,12 +76,16 @@
     bigPicture.querySelector('.social__caption').textContent = photo.comments[0];
     bigPicture.querySelector('.likes-count').textContent = photo.likes;
     bigPicture.querySelector('.comments-count').textContent = photo.comments.length;
+    bigPicture.dataset.id = evt.currentTarget.dataset.id;
+
+    commentsCount.firstChild.textContent = COMMENTS_MIN + ' из ';
+    loadMoreButton.classList.remove('hidden');
 
     for (var i = commentsContainer.children.length; i > 0; i--) {
       commentsContainer.removeChild(commentsContainer.lastElementChild);
     }
 
-    for (var j = 0; (j < photo.comments.length) && (j < 2); j++) {
+    for (var j = 0; (j < photo.comments.length) && (j < COMMENTS_MIN); j++) {
       var commentId = (photo.comments.length - 1) - j;
       commentsContainer.appendChild(renderComment(commentId, photoId));
     }
@@ -68,6 +105,22 @@
     }
   };
 
+  bigPictureClose.addEventListener('click', onCloseWindowClick);
+
+  var onLoadMoreButtonClick = function () {
+    var commentsLoaded = commentsCount.firstChild.textContent.split(' ')[0];
+    loadComments(parseInt(commentsLoaded, 10));
+  };
+
+  var onLoadMoreButtonEnterPress = function (evt) {
+    if (evt.keyCode === ENTER_KEY) {
+      onLoadMoreButtonClick();
+    }
+  };
+
+  loadMoreButton.addEventListener('click', onLoadMoreButtonClick);
+  loadMoreButton.addEventListener('keydown', onLoadMoreButtonEnterPress);
+
   // обработчики для фото
 
   window.common.renderPreviewListeners = function () {
@@ -75,6 +128,8 @@
       picture.addEventListener('click', onPhotoClick);
     });
   };
-
-  bigPictureClose.addEventListener('click', onCloseWindowClick);
 })();
+
+// изначально: 5 комментариев
+// нам нужно добавить еще 5.
+// и отобразить это в разметке
