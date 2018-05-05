@@ -5,7 +5,7 @@
   var AVATARS_MAX = 6;
   var COMMENTS_MIN = 5;
 
-  var bodyElement = document.querySelector('body');
+  var body = document.querySelector('body');
   var bigPicture = document.querySelector('.big-picture');
   var bigPictureClose = bigPicture.querySelector('#picture-cancel');
   var commentsContainer = document.querySelector('.social__comments');
@@ -19,21 +19,21 @@
    * @return {element}   элемент разметки с комментарием
    */
   var renderComment = function (cNum, pNum) {
-    var commentElement = document.createElement('li');
-    commentElement.classList.add('social__comment', 'social__comment--text');
+    var comment = document.createElement('li');
+    comment.classList.add('social__comment', 'social__comment--text');
 
-    var imgElement = document.createElement('img');
-    imgElement.classList.add('social__picture');
-    imgElement.src = 'img/avatar-' + window.common.getRandomNum(1, (AVATARS_MAX + 1)) + '.svg';
-    imgElement.alt = 'Аватар комментатора фотографии';
-    imgElement.width = '35';
-    imgElement.height = '35';
-    commentElement.appendChild(imgElement);
+    var avatar = document.createElement('img');
+    avatar.classList.add('social__picture');
+    avatar.src = 'img/avatar-' + window.common.getRandomNum(1, (AVATARS_MAX + 1)) + '.svg';
+    avatar.alt = 'Аватар комментатора фотографии';
+    avatar.width = '35';
+    avatar.height = '35';
+    comment.appendChild(avatar);
 
-    var textElement = document.createTextNode(window.common.photos[pNum].comments[cNum]);
-    commentElement.appendChild(textElement);
+    var textNode = document.createTextNode(window.common.photos[pNum].comments[cNum]);
+    comment.appendChild(textNode);
 
-    return commentElement;
+    return comment;
   };
 
   var loadComments = function (amount) {
@@ -69,7 +69,7 @@
     var photoId = evt.currentTarget.dataset.id - 1;
     var photo = window.common.photos[photoId];
 
-    bodyElement.classList.add('modal-open');
+    body.classList.add('modal-open');
     bigPicture.classList.remove('hidden');
 
     bigPicture.querySelector('.big-picture__img img').src = photo.url;
@@ -95,7 +95,7 @@
 
   var onCloseWindowClick = function () {
     bigPicture.classList.add('hidden');
-    bodyElement.classList.remove('modal-open');
+    body.classList.remove('modal-open');
     document.removeEventListener('keydown', onBigPictureEscPress);
   };
 

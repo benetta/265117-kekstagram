@@ -6,7 +6,7 @@
 
   var photos;
 
-  var imageUploadElement = document.querySelector('.img-upload__overlay');
+  var imageUploadOverlay = document.querySelector('.img-upload__overlay');
   var imageUploadImg = document.querySelector('.img-upload__preview img');
 
   /**
@@ -66,7 +66,7 @@
     getRandomNum: getRandomNum,
     setMessage: setMessage,
 
-    imageUploadElement: imageUploadElement,
+    imageUploadOverlay: imageUploadOverlay,
     imageUploadImg: imageUploadImg
   };
 })();

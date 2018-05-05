@@ -3,9 +3,9 @@
 (function () {
   var FILE_TYPES = ['image/jpeg', 'image/jpg', 'image/png'];
 
-  var formElement = document.querySelector('#upload-select-image');
+  var form = document.querySelector('#upload-select-image');
 
-  var parentEl = window.common.imageUploadElement;
+  var parentSection = window.common.imageUploadOverlay;
   var imagePreview = window.common.imageUploadImg;
 
   var uploadFile = document.querySelector('#upload-file');
@@ -13,44 +13,34 @@
 
   var inputOriginal = document.querySelector('#effect-none');
 
-  var hashtagElement = document.querySelector('.text__hashtags');
-  var commentsInput = parentEl.querySelector('.text__description');
+  var hashtagInput = document.querySelector('.text__hashtags');
+  var commentsInput = parentSection.querySelector('.text__description');
 
-  var resizeControl = parentEl.querySelector('.resize');
-  var resizeControlValue = parentEl.querySelector('.resize__control--value');
+  var resizeControl = parentSection.querySelector('.resize');
+  var resizeControlValue = parentSection.querySelector('.resize__control--value');
 
-  var imageSlider = parentEl.querySelector('.img-upload__scale');
+  var imageSlider = parentSection.querySelector('.img-upload__scale');
 
-  var scalePin = parentEl.querySelector('.scale__pin');
-  var scaleLevel = parentEl.querySelector('.scale__level');
-  var scaleValue = parentEl.querySelector('.scale__value');
+  var scalePin = parentSection.querySelector('.scale__pin');
+  var scaleLevel = parentSection.querySelector('.scale__level');
+  var scaleValue = parentSection.querySelector('.scale__value');
 
   var clearForm = function () {
+    parentSection.classList.add('hidden');
     imagePreview.removeAttribute('style');
     imagePreview.removeAttribute('class');
-    imagePreview.src = 'img/upload-default-image.jpg';
-
-    resizeControlValue.value = '100%';
+    imagePreview.src = '#';
 
     imageSlider.classList.add('hidden');
     scalePin.style.left = '100%';
     scaleLevel.style.width = '100%';
-    scaleValue.value = '100';
 
-    inputOriginal.checked = 'true';
-
-    hashtagElement.style = null;
-    hashtagElement.value = '';
-
-    commentsInput.value = '';
-
-    uploadFile.removeAttribute('value');
-    parentEl.classList.add('hidden');
+    form.reset();
   };
 
   var onUploadFileClick = function () {
     imageSlider.classList.add('hidden');
-    parentEl.classList.remove('hidden');
+    parentSection.classList.remove('hidden');
     resizeControl.style.zIndex = 1;
 
     document.addEventListener('keydown', onUploadElementEscPress);
@@ -81,7 +71,7 @@
   };
 
   var onUploadElementEscPress = function (evt) {
-    if (evt.keyCode === window.common.ESC_KEY && evt.target !== hashtagElement && evt.target !== commentsInput) {
+    if (evt.keyCode === window.common.ESC_KEY && evt.target !== hashtagInput && evt.target !== commentsInput) {
       onUploadCancelClick();
     }
   };
@@ -107,8 +97,8 @@
   var onSubmitClick = function (evt) {
     evt.preventDefault();
 
-    window.backend.sendData(new FormData(formElement), onLoad, onError);
+    window.backend.sendData(new FormData(form), onLoad, onError);
   };
 
-  formElement.addEventListener('submit', onSubmitClick);
+  form.addEventListener('submit', onSubmitClick);
 })();

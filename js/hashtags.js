@@ -4,10 +4,10 @@
   var HASHTAGS_MAX_NUM = 5;
   var HASHTAG_MAX_LENGTH = 20;
 
-  var hashtagElement = document.querySelector('.text__hashtags');
+  var hashtagInput = document.querySelector('.text__hashtags');
 
   var checkHashtagValidity = function () {
-    var hashtagArr = hashtagElement.value.trim().toLowerCase().split(' ');
+    var hashtagArr = hashtagInput.value.trim().toLowerCase().split(' ');
 
     var constraints = {
       startsWithHash: 'хэш-тег начинается с символа # (решётка)',
@@ -54,15 +54,15 @@
     return message;
   };
 
-  hashtagElement.addEventListener('input', function () {
+  hashtagInput.addEventListener('input', function () {
     var message = checkHashtagValidity();
 
     if (message !== '') {
-      hashtagElement.setCustomValidity(message);
-      hashtagElement.style.border = '1px solid red';
+      hashtagInput.setCustomValidity(message);
+      hashtagInput.style.border = '1px solid red';
     } else {
-      hashtagElement.setCustomValidity(message);
-      hashtagElement.style = null;
+      hashtagInput.setCustomValidity(message);
+      hashtagInput.style = null;
     }
   });
 })();
