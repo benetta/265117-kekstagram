@@ -11,19 +11,15 @@
   var uploadFile = document.querySelector('#upload-file');
   var uploadCancel = document.querySelector('#upload-cancel');
 
-  var inputOriginal = document.querySelector('#effect-none');
-
   var hashtagInput = document.querySelector('.text__hashtags');
   var commentsInput = parentSection.querySelector('.text__description');
 
   var resizeControl = parentSection.querySelector('.resize');
-  var resizeControlValue = parentSection.querySelector('.resize__control--value');
 
   var imageSlider = parentSection.querySelector('.img-upload__scale');
 
   var scalePin = parentSection.querySelector('.scale__pin');
   var scaleLevel = parentSection.querySelector('.scale__level');
-  var scaleValue = parentSection.querySelector('.scale__value');
 
   var clearForm = function () {
     parentSection.classList.add('hidden');

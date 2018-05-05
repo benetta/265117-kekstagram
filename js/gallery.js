@@ -70,23 +70,13 @@
 
     var sortPopular = function () {
       photosCopy.sort(function (a, b) {
-        if (a.likes < b.likes) {
-          return 1;
-        } else if (a.likes > b.likes) {
-          return -1;
-        }
-        return 0;
+        return b.likes - a.likes;
       });
     };
 
     var sortDiscussed = function () {
       photosCopy.sort(function (a, b) {
-        if (a.comments.length < b.comments.length) {
-          return 1;
-        } else if (a.comments.length > b.comments.length) {
-          return -1;
-        }
-        return 0;
+        return b.comments.length - a.comments.length;
       });
     };
 

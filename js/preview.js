@@ -48,10 +48,13 @@
       step = photo.comments.length - commentsLoaded;
     }
 
+    var fragment = document.createDocumentFragment();
+
     for (var j = 0; j < step; j++) {
       var commentId = ((photo.comments.length - 1) - commentsLoaded) - j;
-      commentsContainer.appendChild(renderComment(commentId, id));
+      fragment.appendChild(renderComment(commentId, id));
     }
+    commentsContainer.appendChild(fragment);
 
     commentsLoaded = commentsLoaded + step;
     if (commentsLoaded > photo.comments.length) {
@@ -85,10 +88,14 @@
       commentsContainer.removeChild(commentsContainer.lastElementChild);
     }
 
+    var fragment = document.createDocumentFragment();
+
     for (var j = 0; (j < photo.comments.length) && (j < COMMENTS_MIN); j++) {
       var commentId = (photo.comments.length - 1) - j;
-      commentsContainer.appendChild(renderComment(commentId, photoId));
+      fragment.appendChild(renderComment(commentId, photoId));
     }
+
+    commentsContainer.appendChild(fragment);
 
     document.addEventListener('keydown', onBigPictureEscPress);
   };
