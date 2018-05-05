@@ -20,19 +20,6 @@
     return num;
   };
 
-  var picturesTemplate = document.querySelector('#picture').content.querySelector('.picture__link');
-
-  var renderPhoto = function (num) {
-    var photoElement = picturesTemplate.cloneNode(true);
-
-    photoElement.querySelector('.picture__img').src = window.common.photos[num].url;
-    photoElement.querySelector('.picture__stat--likes').textContent = window.common.photos[num].likes;
-    photoElement.querySelector('.picture__stat--comments').textContent = window.common.photos[num].comments.length;
-    photoElement.querySelector('.picture__img').dataset.id = num;
-
-    return photoElement;
-  };
-
   var Code = {
     BAD_REQUEST: 400,
     NOT_FOUND: 404,
@@ -77,7 +64,6 @@
     photos: photos,
 
     getRandomNum: getRandomNum,
-    renderPhoto: renderPhoto,
     setMessage: setMessage,
 
     imageUploadElement: imageUploadElement,

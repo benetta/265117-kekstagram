@@ -1,7 +1,7 @@
 'use strict';
 
 (function () {
-  var TIMEOUT = 5000;
+  var TIMEOUT = 10000;
   var GET_URL = 'https://js.dump.academy/kekstagram/data';
   var POST_URL = 'https://js.dump.academy/kekstagram';
   var SUCCESS = 200;

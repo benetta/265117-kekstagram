@@ -35,7 +35,9 @@
       message = constraints.noMoreThanFive;
     } else {
       hashtagArr.forEach(function (tag) {
-        if (tag.charAt(0) !== '#') {
+        if (hashtagArr.length === 1 && tag === '') {
+          message = '';
+        } else if (tag.charAt(0) !== '#') {
           message = constraints.startsWithHash;
         } else if (tag === '#') {
           message = constraints.cantBeOnlyHash;
