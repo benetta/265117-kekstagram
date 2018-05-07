@@ -81,8 +81,12 @@
     bigPicture.querySelector('.comments-count').textContent = photo.comments.length;
     bigPicture.dataset.id = evt.currentTarget.dataset.id;
 
-    commentsCount.firstChild.textContent = COMMENTS_MIN + ' из ';
-    loadMoreButton.classList.remove('hidden');
+    if(photo.comments.length > COMMENTS_MIN) {
+      commentsCount.firstChild.textContent = COMMENTS_MIN + ' из ';
+      loadMoreButton.classList.remove('hidden');
+    } else {
+      commentsCount.firstChild.textContent = photo.comments.length + ' из ';
+    }
 
     for (var i = commentsContainer.children.length; i > 0; i--) {
       commentsContainer.removeChild(commentsContainer.lastElementChild);
