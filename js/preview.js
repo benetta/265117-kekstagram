@@ -81,7 +81,7 @@
     bigPicture.querySelector('.comments-count').textContent = photo.comments.length;
     bigPicture.dataset.id = evt.currentTarget.dataset.id;
 
-    if(photo.comments.length > COMMENTS_MIN) {
+    if (photo.comments.length > COMMENTS_MIN) {
       commentsCount.firstChild.textContent = COMMENTS_MIN + ' из ';
       loadMoreButton.classList.remove('hidden');
     } else {
