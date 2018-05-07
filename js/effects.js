@@ -1,13 +1,13 @@
 'use strict';
 
 (function () {
-  var SLIDER_WIDTH = 495;
   var SCALE_MAX = 100;
 
   var imagePreview = window.common.imageUploadImg;
   var imageUploadEffects = document.querySelector('.effects__list');
   var imageSlider = document.querySelector('.img-upload__scale');
 
+  var scaleLine = document.querySelector('.scale__line');
   var scalePin = document.querySelector('.scale__pin');
   var scaleLevel = document.querySelector('.scale__level');
   var scaleValue = document.querySelector('.scale__value');
@@ -109,22 +109,17 @@
   var onScalePinMouseDown = function (evt) {
     evt.preventDefault();
 
-    var startCoords = {
-      x: evt.clientX,
-      y: evt.clientY
-    };
+    var startX = evt.clientX;
 
+    var scaleLineWidth = scaleLine.offsetWidth;
     var pinPosition = Number.parseInt(scalePin.style.left, 10);
 
     var onMouseMove = function (moveEvt) {
       moveEvt.preventDefault();
 
-      var shift = {
-        x: startCoords.x - moveEvt.clientX,
-        y: startCoords.y - moveEvt.clientY,
-      };
+      var shiftX = startX - moveEvt.clientX;
 
-      var diff = shift.x / SLIDER_WIDTH * SCALE_MAX;
+      var diff = shiftX / scaleLineWidth * SCALE_MAX;
 
       diff = (pinPosition - Math.round(diff));
 

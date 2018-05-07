@@ -21,6 +21,8 @@
   var scalePin = parentSection.querySelector('.scale__pin');
   var scaleLevel = parentSection.querySelector('.scale__level');
 
+  imagePreview.src = '#';
+
   var clearForm = function () {
     parentSection.classList.add('hidden');
     imagePreview.removeAttribute('style');
